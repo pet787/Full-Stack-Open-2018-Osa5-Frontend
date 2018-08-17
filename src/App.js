@@ -11,6 +11,7 @@ class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      notification: null,
       blogs: [],
       username: '',
       password: '',
@@ -37,6 +38,26 @@ class App extends React.Component {
 
   } 
 
+  showNote = (message ) => {
+    this.setState({
+      notification: message,
+      error : false
+    })
+    setTimeout(() => {
+      this.setState({ notification: null })
+    }, 5000)
+  }
+
+  showError = (message) => {
+    this.setState({
+      notification: message,
+      error : true
+    })
+    setTimeout(() => {
+      this.setState({ notification: null })
+    }, 5000)
+  }
+  
   login = async (event) => {
     event.preventDefault()
     try {
@@ -49,12 +70,7 @@ class App extends React.Component {
 //      blogService.setToken(user.token)
       this.setState({ username: '', password: '', user, mode: 'blogs' })
     } catch (exception) {
-      this.setState({
-        error: 'username or password wrong',
-      })
-      setTimeout(() => {
-        this.setState({ error: null })
-      }, 5000)
+      this.showError( 'username or password wrong' )
     }
   }
 
@@ -71,17 +87,15 @@ class App extends React.Component {
   }
 
   addBlog = async (event) => {
-    console.log(this.state.newBlog)
     event.preventDefault()
     try {
       const blog = await blogService.create( this.state.newBlog )
       const blogs = [...this.state.blogs, blog ]
       this.setState( { blogs: blogs, mode: 'blogs' } )
+      this.showNote( 'A new blog \'' + blog.title + '\' by ' + blog.username + ' was added' )
     } catch (exception) {
-      this.setState({ error: 'Adding blog failed' })
-      setTimeout(() => {
-        this.setState({ error: null })
-      }, 5000)
+      this.setState( { mode: 'blogs' } )
+      this.showError( 'Adding blog failed' )
     }
   }
   
@@ -90,7 +104,10 @@ class App extends React.Component {
     if (mode === 'login') {
       return (
         <div>
-           <Notification message={this.state.error} />
+          <Notification
+            message={this.state.notification} 
+            error={this.state.error}  
+          />
            <LoginForm
               username={this.state.username}
               password={this.state.password}
@@ -103,7 +120,10 @@ class App extends React.Component {
      } else if (mode === 'blogs') {
       return (
         <div>
-          <Notification message={this.state.error} />
+          <Notification
+            message={this.state.notification} 
+            error={this.state.error}  
+          />
           <LoggedForm
             name={ this.state.username }
             handleLogout={ this.logout }
@@ -120,14 +140,17 @@ class App extends React.Component {
     } else if ( mode === 'new' ) {
       return (
         <div>
-          <Notification message = { this.state.error } />
+          <Notification
+            message={this.state.notification} 
+            error={this.state.error}  
+          />
           <LoggedForm
             name={ this.state.username }
             handleLogout={ this.logout }
           />
           <BlogForm
             handleSubmit = { this.addBlog }
-            handleChange = { this.handleBlogFieldChange} 
+            handleChange = { this.handleBlogFieldChange}
           />
         </div>
       )

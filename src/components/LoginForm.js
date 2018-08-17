@@ -3,7 +3,7 @@ import React from 'react'
 const LoginForm = ({ handleSubmit, handleChange, username, password }) => {
   return (
     <div>
-      <h2>Login</h2>
+      <h2>Login in to application</h2>
 
       <form onSubmit={handleSubmit}>
         <div>

@@ -1,6 +1,6 @@
 import React from 'react'
 
-const BlogForm = ({ handleSubmit, handleChange, value }) => {
+const BlogForm = ({ handleSubmit, handleChange }) => {
   return (
     <div>
       <h2>Create new blog</h2>
@@ -9,7 +9,6 @@ const BlogForm = ({ handleSubmit, handleChange, value }) => {
           title
           <input 
             name='title'
-            value={value}
             onChange={handleChange}
           />
         </div>
@@ -17,7 +16,6 @@ const BlogForm = ({ handleSubmit, handleChange, value }) => {
           author
           <input
             name='author'
-            value={value}
           onChange={handleChange}
           />
         </div>
@@ -25,7 +23,6 @@ const BlogForm = ({ handleSubmit, handleChange, value }) => {
           url
           <input
            name='url'
-            value={value}
             onChange={handleChange}
           />
         </div>
