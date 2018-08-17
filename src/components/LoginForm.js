@@ -3,11 +3,11 @@ import React from 'react'
 const LoginForm = ({ handleSubmit, handleChange, username, password }) => {
   return (
     <div>
-      <h2>Kirjaudu</h2>
+      <h2>Login</h2>
 
       <form onSubmit={handleSubmit}>
         <div>
-          käyttäjätunnus
+          Username
           <input
             value={username}
             onChange={handleChange}
@@ -15,7 +15,7 @@ const LoginForm = ({ handleSubmit, handleChange, username, password }) => {
           />
         </div>
         <div>
-          salasana
+          Password
           <input
             type="password"
             name="password"
@@ -23,7 +23,7 @@ const LoginForm = ({ handleSubmit, handleChange, username, password }) => {
             onChange={handleChange}
           />
         </div>
-        <button type="submit">kirjaudu</button>
+        <button type="submit">Login</button>
       </form>
     </div>
   )
