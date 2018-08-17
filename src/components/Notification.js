@@ -15,7 +15,7 @@ const Notification = ({ message, error = false  }) => {
         {message}
       </div>
     )
-}
+  }
 }
 
 export default Notification

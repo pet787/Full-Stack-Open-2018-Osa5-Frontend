@@ -4,6 +4,7 @@ import LoginForm from './components/LoginForm'
 import LoggedForm from './components/LoggedForm'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
+import Togglable from './components/Togglable'
 import loginService from './services/login'
 import blogService from './services/blogs'
 
@@ -35,7 +36,6 @@ class App extends React.Component {
       this.setState({ user, mode: 'blogs' })
       blogService.setToken(user.token)
     }    
-
   } 
 
   showNote = (message ) => {
@@ -91,10 +91,9 @@ class App extends React.Component {
     try {
       const blog = await blogService.create( this.state.newBlog )
       const blogs = [...this.state.blogs, blog ]
-      this.setState( { blogs: blogs, mode: 'blogs' } )
+      this.setState( { blogs: blogs } )
       this.showNote( 'A new blog \'' + blog.title + '\' by ' + blog.username + ' was added' )
     } catch (exception) {
-      this.setState( { mode: 'blogs' } )
       this.showError( 'Adding blog failed' )
     }
   }
@@ -129,29 +128,15 @@ class App extends React.Component {
             handleLogout={ this.logout }
           />
           <h2>blogs</h2>
-          <button onClick = { () => this.setState( { mode: 'new' } ) }>
-              create blog
-            </button>
+          <Togglable buttonLabel="Create blog">
+            <BlogForm
+              handleSubmit = { this.addBlog }
+              handleChange = { this.handleBlogFieldChange}
+            />
+          </Togglable>
           {this.state.blogs.map(blog =>
             <Blog key={blog._id} blog={blog} />
           )}
-        </div>
-      )
-    } else if ( mode === 'new' ) {
-      return (
-        <div>
-          <Notification
-            message={this.state.notification} 
-            error={this.state.error}  
-          />
-          <LoggedForm
-            name={ this.state.username }
-            handleLogout={ this.logout }
-          />
-          <BlogForm
-            handleSubmit = { this.addBlog }
-            handleChange = { this.handleBlogFieldChange}
-          />
         </div>
       )
     }
