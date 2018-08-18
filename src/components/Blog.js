@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 const lineStyle = {
   paddingLeft: 10,
@@ -35,6 +36,14 @@ const Blog = ( { user, blog, onClickHeader, onClickLike, onClickDelete } ) => {
     </div>  
     )
   }
+}
+
+Blog.propTypes = {
+  user: PropTypes.object.isRequired,
+  blog: PropTypes.object.isRequired,
+  onClickHeader: PropTypes.func.isRequired,
+  onClickLike: PropTypes.func.isRequired,
+  onClickDelete: PropTypes.func.isRequired
 }
 
 export default Blog

@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 const LoggedForm = ({ name, handleLogout }) => {
   return (
@@ -9,6 +10,11 @@ const LoggedForm = ({ name, handleLogout }) => {
         </button>
     </div>
   )
+}
+
+LoggedForm.propTypes = {
+  handleLogout: PropTypes.func.isRequired,
+  name: PropTypes.string.isRequired
 }
 
 export default LoggedForm
