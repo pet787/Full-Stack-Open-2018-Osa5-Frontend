@@ -22,6 +22,7 @@ class App extends React.Component {
         title : '',
         author : '',
         url : '',
+        likes : 0
       }
     }
   }
@@ -51,7 +52,7 @@ class App extends React.Component {
     })
     setTimeout(() => {
       this.setState({ notification: null })
-    }, 5000)
+    }, 2000)
   }
 
   showError = (message) => {
@@ -61,7 +62,7 @@ class App extends React.Component {
     })
     setTimeout(() => {
       this.setState({ notification: null })
-    }, 5000)
+    }, 4000)
   }
   
   login = async (event) => {
@@ -181,10 +182,10 @@ class App extends React.Component {
             error={this.state.error}  
           />
           <LoggedForm
-            name={ this.state.username }
+            name={ this.state.user.name }
             handleLogout={ this.logout }
           />
-          <h2>blogs</h2>
+          <h2>Blogs</h2>
           <Togglable buttonLabel="Create blog">
             <BlogForm
               handleSubmit = { this.addBlog }
@@ -194,6 +195,7 @@ class App extends React.Component {
           {this.state.blogs.map(blog =>
             <Blog 
               key={blog._id} 
+              user={this.state.user}
               blog={blog} 
               onClickHeader={this.handleBlogHeaderClick(blog._id)}
               onClickLike={this.handleBlogLikeClick(blog._id)}

@@ -7,21 +7,21 @@ const BlogForm = ({ handleSubmit, handleChange }) => {
       <h2>Create new blog</h2>
       <form onSubmit={handleSubmit}>
         <div>
-          title
+          Title
           <input 
             name='title'
             onChange={handleChange}
           />
         </div>
         <div>
-          author
+          Author
           <input
             name='author'
           onChange={handleChange}
           />
         </div>
         <div>
-          url
+          URL
           <input
            name='url'
             onChange={handleChange}
