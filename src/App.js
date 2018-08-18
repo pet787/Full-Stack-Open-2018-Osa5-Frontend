@@ -26,10 +26,16 @@ class App extends React.Component {
     }
   }
 
+  sortByLikes = (a, b) => {
+    if (a.likes > b.likes ) return -1
+    if (a.likes < b.likes ) return 1
+    return 0
+  }
+
   componentDidMount() {
-    blogService.getAll().then(blogs =>
-      this.setState({ blogs })
-    )
+    blogService.getAll().then(blogs => {
+      this.setState({ blogs: blogs.sort(this.sortByLikes) })
+    } )
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
@@ -91,8 +97,9 @@ class App extends React.Component {
     try {
       const username = this.state.user.name
       const blog = await blogService.create( this.state.newBlog )
+      console.log('newBlog', blog)
       const blogs = [...this.state.blogs, blog ]
-      this.setState( { blogs: blogs } )
+      this.setState( { blogs: blogs.sort(this.sortByLikes) } )
       this.showNotification( 'A new blog \'' + blog.title + '\' by ' + username + ' was added' )
     } catch (exception) {
       this.showError( 'Adding blog failed' )
@@ -125,10 +132,26 @@ class App extends React.Component {
           return blog
         }
       })
-      this.setState( { blogs: blogs } )
+      this.setState( { blogs: blogs.sort(this.sortByLikes) } )
       this.showNotification( 'A like +1 was added' )
     } catch (exception) {
       this.showError( 'Adding like failed' )
+    }
+  }
+
+  handleBlogDeleteClick = (id) => async (event) => {
+    event.preventDefault()
+    try {
+      const blog = this.state.blogs.find(blog => blog._id === id)
+      console.log(blog)
+      if ( window.confirm( 'Delete ' + blog.title + ' by ' + blog.author ) ) {
+        await blogService.deleteBlog( id )
+        const blogs = this.state.blogs.filter(blog => blog._id !== id)
+        this.setState( { blogs: blogs.sort(this.sortByLikes) } )
+        this.showNotification( 'A blog was deleted' )
+      }
+    } catch (exception) {
+        this.showError( 'Delete blog failed' )
     }
   }
 
@@ -174,6 +197,7 @@ class App extends React.Component {
               blog={blog} 
               onClickHeader={this.handleBlogHeaderClick(blog._id)}
               onClickLike={this.handleBlogLikeClick(blog._id)}
+              onClickDelete={this.handleBlogDeleteClick(blog._id)}
             />
           )}
         </div>
