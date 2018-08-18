@@ -111,16 +111,25 @@ class App extends React.Component {
     this.setState( { blogs: blogs } )
   }
   
-  handleBlogLikeClick = (id) => (event) => {
+  handleBlogLikeClick = (id) => async (event) => {
     event.preventDefault()
-    const blogs = this.state.blogs.map(blog => {
-      if (blog._id === id ) {
-        return {...blog, likes: blog.likes + 1 }
-      } else {
-        return blog
-      }
-    })
-    this.setState( { blogs: blogs } )
+    try {
+      var newBlog = this.state.blogs.find( blog => blog._id === id )
+      newBlog = {...newBlog, likes: newBlog.likes + 1 }
+      console.log(newBlog)
+      await blogService.update( id, newBlog )
+      const blogs = this.state.blogs.map(blog => {
+        if (blog._id === id ) {
+          return newBlog
+        } else {
+          return blog
+        }
+      })
+      this.setState( { blogs: blogs } )
+      this.showNotification( 'A like +1 was added' )
+    } catch (exception) {
+      this.showError( 'Adding like failed' )
+    }
   }
 
   render() {
