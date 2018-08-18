@@ -21,7 +21,7 @@ class App extends React.Component {
       newBlog: {
         title : '',
         author : '',
-        url : ''
+        url : '',
       }
     }
   }
@@ -38,7 +38,7 @@ class App extends React.Component {
     }    
   } 
 
-  showNote = (message ) => {
+  showNotification = (message ) => {
     this.setState({
       notification: message,
       error : false
@@ -89,15 +89,40 @@ class App extends React.Component {
   addBlog = async (event) => {
     event.preventDefault()
     try {
+      const username = this.state.user.name
       const blog = await blogService.create( this.state.newBlog )
       const blogs = [...this.state.blogs, blog ]
       this.setState( { blogs: blogs } )
-      this.showNote( 'A new blog \'' + blog.title + '\' by ' + blog.username + ' was added' )
+      this.showNotification( 'A new blog \'' + blog.title + '\' by ' + username + ' was added' )
     } catch (exception) {
       this.showError( 'Adding blog failed' )
     }
   }
+
+  handleBlogHeaderClick = (id) => (event) => {
+    event.preventDefault()
+    const blogs = this.state.blogs.map(blog => {
+      if (blog._id === id ) {
+        return {...blog, showOpen: !blog.showOpen }
+      } else {
+        return blog
+      }
+    })
+    this.setState( { blogs: blogs } )
+  }
   
+  handleBlogLikeClick = (id) => (event) => {
+    event.preventDefault()
+    const blogs = this.state.blogs.map(blog => {
+      if (blog._id === id ) {
+        return {...blog, likes: blog.likes + 1 }
+      } else {
+        return blog
+      }
+    })
+    this.setState( { blogs: blogs } )
+  }
+
   render() {
     const mode = this.state.mode
     if (mode === 'login') {
@@ -135,7 +160,12 @@ class App extends React.Component {
             />
           </Togglable>
           {this.state.blogs.map(blog =>
-            <Blog key={blog._id} blog={blog} />
+            <Blog 
+              key={blog._id} 
+              blog={blog} 
+              onClickHeader={this.handleBlogHeaderClick(blog._id)}
+              onClickLike={this.handleBlogLikeClick(blog._id)}
+            />
           )}
         </div>
       )
