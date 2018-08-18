@@ -7,32 +7,31 @@ const lineStyle = {
 
 const Blog = ( { user, blog, onClickHeader, onClickLike, onClickDelete } ) => {
 
-  console.log('blog.user',blog.user,'user',user)
   if (blog.showOpen) {
     if (blog.user._id===undefined || user.id === blog.user._id) {
       return( 
         <div className="blog">
-          <div onClick={onClickHeader}><b>Title: {blog.title} Author: {blog.author}</b></div>
-          <div style={lineStyle}>{blog.url}</div>
-          <div style={lineStyle}>{blog.likes} likes <button type="button" onClick={onClickLike}>Like</button></div>
-          <div style={lineStyle}>added by {blog.user.name}</div>
-          <div style={lineStyle}><button type="button" onClick={onClickDelete}>Delete</button></div>
+          <div className="header" onClick={onClickHeader}><b>Title: {blog.title} Author: {blog.author}</b></div>
+          <div className="url" style={lineStyle}>{blog.url}</div>
+          <div className="likes" style={lineStyle}>{blog.likes} likes <button type="button" onClick={onClickLike}>Like</button></div>
+          <div className="user"  style={lineStyle}>added by {blog.user.name}</div>
+          <div className="delete" style={lineStyle}><button className="deleteButton" type="button" onClick={onClickDelete}>Delete</button></div>
       </div>  
       )
     } else {
       return( 
         <div className="blog">
-        <div onClick={onClickHeader}><b>Title: {blog.title} Author: {blog.author}</b></div>
-        <div style={lineStyle}>{blog.url}</div>
-        <div style={lineStyle}>{blog.likes} likes <button type="button" onClick={onClickLike}>Like</button></div>
-        <div style={lineStyle}>added by {blog.user.name}</div>
+          <div className="header" onClick={onClickHeader}><b>Title: {blog.title} Author: {blog.author}</b></div>
+          <div className="url" style={lineStyle}>{blog.url}</div>
+          <div className="likes" style={lineStyle}>{blog.likes} likes <button type="button" onClick={onClickLike}>Like</button></div>
+          <div className="user" style={lineStyle}>added by {blog.user.name}</div>
         </div>
       )  
     }
   } else {
     return( 
     <div className="blog">
-        <div onClick={onClickHeader}><b>Title: {blog.title} Author: {blog.author}</b></div>
+        <div className="header" onClick={onClickHeader}><b>Title: {blog.title} Author: {blog.author}</b></div>
     </div>  
     )
   }
