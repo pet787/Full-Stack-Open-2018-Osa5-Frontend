@@ -11,8 +11,11 @@ describe.only('<SimpleBlog />', () => {
     }
 
     const blogComponent = shallow( <SimpleBlog blog = { blog } /> )
-    const contentDiv = blogComponent.find( '.header' )
-    expect(contentDiv.text()).toContain(blog.title)
+    const headerDiv = blogComponent.find( '.header' )
+    expect(headerDiv.text()).toContain(blog.title)
+    expect(headerDiv.text()).toContain(blog.author)
+    const likesDiv = blogComponent.find( '.likes' )
+    expect(likesDiv.text()).toContain(blog.likes)
   })
 
   it('clicking the button twice calls event handler twice', () => {
