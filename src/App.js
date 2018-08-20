@@ -22,7 +22,8 @@ class App extends React.Component {
         title : '',
         author : '',
         url : '',
-        likes : 0
+        likes : 0,
+        user: ''
       }
     }
   }
@@ -34,15 +35,19 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    blogService.getAll().then(blogs => {
-      this.setState({ blogs: blogs.sort(this.sortByLikes) })
-    } )
-    const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      this.setState({ user, mode: 'blogs' })
-      blogService.setToken(user.token)
-    }    
+    try {
+      const loggedUserJSON = localStorage.getItem('loggedBlogappUser')
+      if (loggedUserJSON) {
+        const user = JSON.parse(loggedUserJSON)
+        this.setState({ user: user, mode: 'blogs' })
+        blogService.setToken(user.token)
+      }   
+      blogService.getAll().then(blogs => {
+        this.setState({ blogs: blogs.sort(this.sortByLikes) })
+      } )
+    } catch ( exception ) {
+      console.log('componentDidMount:', exception )
+    }
   } 
 
   showNotification = (message ) => {
@@ -97,7 +102,10 @@ class App extends React.Component {
     event.preventDefault()
     try {
       const username = this.state.user.name
-      const blog = await blogService.create( this.state.newBlog )
+      const userId = this.state.user.id
+      let newBlog = this.state.newBlog 
+      newBlog = {...newBlog, user: userId }
+      const blog = await blogService.create( newBlog )
       console.log('newBlog', blog)
       const blogs = [...this.state.blogs, blog ]
       this.setState( { blogs: blogs.sort(this.sortByLikes) } )
